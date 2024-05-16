@@ -1,0 +1,26 @@
+﻿<Window x:Class="T1Balance.MVVM.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:T1Balance"
+        xmlns:nav="clr-namespace:T1Balance.State.Navigators"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
+        <ContentControl Grid.Row="0"
+                Content="{Binding Navigator.CurrentViewModel}"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <RadioButton Content="Info"
+                         Command="{Binding UpdateCurrentViewModel}"
+                         CommandParameter="{x:Static nav:ViewType.Info}"/>
+            <RadioButton Content="Settings"
+                         Command="{Binding UpdateCurrentViewModel}"
+                         CommandParameter="{x:Static nav:ViewType.Settings}"/>
+        </StackPanel>
+    </Grid>
+</Window>
