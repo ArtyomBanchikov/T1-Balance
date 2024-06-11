@@ -11,10 +11,8 @@ namespace T1Balance.MVVM.ViewModel
 {
     public class InfoViewModel : ViewModelBase
     {
-        private static readonly NotificationManager __NotificationManager = new NotificationManager();
-        private HubConnection _connection;
-        private double _balance;
-        public double Balance
+        private string _balance;
+        public string Balance
         {
             get { return _balance; }
             set
@@ -46,34 +44,11 @@ namespace T1Balance.MVVM.ViewModel
         public IAuthenticator Authenticator { get; set; }
         public InfoViewModel(IAuthenticator authenticator)
         {
-            Balance = authenticator.CurrentAccount.Balance;
+            string balance = authenticator.CurrentAccount.Balance.ToString("F3");
+            string balanceStr = balance.Remove(balance.Length - 1) + "р";
+            Balance = balanceStr;
             Name = authenticator.CurrentUser.Name;
             TariffName = authenticator.CurrentTariff.Name;
-            _connection = new HubConnectionBuilder()
-                .WithUrl("", options =>
-                {
-                    options.AccessTokenProvider = () => Task.FromResult(authenticator.CurrentUser.Token);
-                    //options.UseDefaultCredentials = true;
-                })
-                .WithAutomaticReconnect()
-                .Build();
-
-            _connection.On<AccountModel>("Receive", (account) =>
-            {
-                if(account.Balance <= 0)
-                    __NotificationManager.Show("Баланс отрицательный");
-                else if(account.Balance > Balance)
-                    __NotificationManager.Show("Пополнение баланса");
-                Balance = account.Balance;
-            });
-            try
-            {
-                _connection.StartAsync();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
     }
 }
