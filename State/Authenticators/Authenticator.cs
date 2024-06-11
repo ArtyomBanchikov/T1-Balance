@@ -60,7 +60,7 @@ namespace T1Balance.State.Authenticators
         }
 
 
-        public async Task<bool> Login(string username, string password)
+        public async Task Login(string username, string password)
         {
             ShortClientModel loginUser = new ShortClientModel();
             loginUser.Login = username;
@@ -78,7 +78,6 @@ namespace T1Balance.State.Authenticators
                 }
                 CurrentTariff = tariffs.LastOrDefault(tariff => tariff.IsDeleted == false);
             }
-            return false;
         }
 
         public void Logout()

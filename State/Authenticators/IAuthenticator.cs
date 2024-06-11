@@ -10,7 +10,7 @@ namespace T1Balance.State.Authenticators
         AccountModel CurrentAccount { get; set; }
         TariffModel CurrentTariff { get; set; }
         bool IsLoggedIn { get; }
-        Task<bool> Login(string username, string password);
+        Task Login(string username, string password);
         void Logout();
         Task<LoginClientModel> TokenCheck(string token);
     }
