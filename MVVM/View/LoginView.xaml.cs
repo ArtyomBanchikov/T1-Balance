@@ -15,7 +15,6 @@ namespace T1Balance.MVVM.View
     /// </summary>
     public partial class LoginView : Window
     {
-        public ICommand LoginCommand { get; set; }
         private IAuthenticator _authenticator;
         private IXmlService _xmlProvider;
         public LoginView()
@@ -24,8 +23,15 @@ namespace T1Balance.MVVM.View
             _xmlProvider = ServiceProviderFactory.ServiceProvider.GetRequiredService<IXmlService>();
             LoginViewModel viewModel = new LoginViewModel(_authenticator, _xmlProvider);
             DataContext = viewModel;
-            LoginCommand = viewModel.LoginCommand;
             InitializeComponent();
+            viewModel.LoginSuccessful += (sender, e) =>
+            {
+                MainWindow window = new MainWindow();
+
+                window.Show();
+                Application.Current.MainWindow = window;
+                Close();
+            };
         }
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -48,46 +54,6 @@ namespace T1Balance.MVVM.View
             if (e.Key == Key.Enter)
             {
                 password_box.Focus();
-            }
-        }
-
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(LoginBox.Text))
-            {
-                MessageBox.Show("Введите имя пользователя");
-                LoginBox.Focus();
-            }
-            else if (string.IsNullOrEmpty(password_box.Password))
-            {
-                MessageBox.Show("Введите пароль");
-                password_box.Focus();
-            }
-            else
-            {
-                if (LoginCommand != null)
-                {
-                    LoginCommand.Execute(password_box.Password);
-                    if (_authenticator != null && _authenticator.IsLoggedIn)
-                    {
-                        if ((bool)RememberCheck.IsChecked)
-                        {
-                            _xmlProvider.IsRemember = true;
-                            _xmlProvider.Token = _authenticator.CurrentUser.Token;
-                        }
-                        else if (_xmlProvider.IsRemember)
-                        {
-                            _xmlProvider.IsRemember = false;
-                            _xmlProvider.Token = "";
-                        }
-                        _xmlProvider.LastLogin = LoginBox.Text;
-                        MainWindow window = new MainWindow();
-
-                        window.Show();
-                        this.Close();
-                        Application.Current.MainWindow = window;
-                    }
-                }
             }
         }
     }
