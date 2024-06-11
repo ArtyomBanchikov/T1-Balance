@@ -27,9 +27,8 @@ namespace T1Balance.Services.WebServices
 
         public async Task<LoginClientModel> Login(ShortClientModel user)
         {
-            //var response = Client.PostAsJsonAsync($"/login", user).Result;
-            //LoginUserModel loginUser = response.Content.ReadFromJsonAsync<LoginUserModel>().Result;
-            LoginClientModel loginUser = await Client.PostAsJsonAsync("/login", user).Result.Content.ReadFromJsonAsync<LoginClientModel>();
+            var response = await Client.PostAsJsonAsync("/login", user);
+            LoginClientModel loginUser = await response.Content.ReadFromJsonAsync<LoginClientModel>();
             if (loginUser != null &&
                 loginUser.Name != null &&
                 loginUser.Token != null)
