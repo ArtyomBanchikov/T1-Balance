@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:T1Balance.MVVM.View"
         mc:Ignorable="d"
-        Title="LoginView" Height="450" Width="800">
+        Height="350" Width="250"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="none">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -102,6 +105,7 @@
                       FontWeight="DemiBold"
                       Grid.Row="5"
                       FontSize="15"
+                      IsChecked="{Binding IsRemember}"
                       VerticalAlignment="Center"/>
 
             <Button Grid.Row="6"
@@ -109,7 +113,8 @@
                     Margin="7"
                     FontSize="15"
                     FontWeight="DemiBold"
-                    Click="Login_Click">
+                    Command="{Binding LoginCommand}"
+                    CommandParameter="{Binding ElementName=password_box}">
 
                 <Button.Style>
                     <Style TargetType="Button">
