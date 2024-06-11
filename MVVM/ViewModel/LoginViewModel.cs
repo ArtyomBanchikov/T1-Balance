@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using T1Balance.Commands;
 using T1Balance.Core;
 using T1Balance.Services.XmlServices;
@@ -31,12 +32,17 @@ namespace T1Balance.MVVM.ViewModel
         }
 
         public ICommand LoginCommand { get; }
+        public event EventHandler LoginSuccessful;
 
         public LoginViewModel(IAuthenticator authenticator, IXmlService xmlProvider)
         {
             if (!string.IsNullOrEmpty(xmlProvider.LastLogin))
                 Login = xmlProvider.LastLogin;
-            LoginCommand = new LoginCommandAsync(authenticator, this);
+            LoginCommand = new LoginCommandAsync(authenticator, this, xmlProvider);
+        }
+        public void OnLoginSuccessful()
+        {
+            LoginSuccessful?.Invoke(this, EventArgs.Empty);
         }
     }
 }
